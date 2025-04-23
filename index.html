@@ -31,7 +31,6 @@
         margin-bottom: 1.5rem;
       }
       .result {
-        text-align: center;
         margin-top: 1rem;
         font-weight: bold;
       }
@@ -39,29 +38,64 @@
   </head>
   <body>
     <div class="container">
-      <h2>Heart Transplant Survival Prediction</h2>
+      <h2>Heart Donor Prediction Model</h2>
       <!-- Prediction Form -->
       <form id="prediction-form">
         <div class="mb-3">
-          <label for="attribute1" class="form-label">Donor Age</label>
-          <input type="number" class="form-control" id="attribute1" required />
+          <label for="GCS" class="form-label">Glasgow Coma Scale (GCS)</label>
+          <input
+            type="number"
+            class="form-control"
+            id="GCS"
+            value="0"
+            min="0"
+            max="15"
+            required
+          />
         </div>
         <div class="mb-3">
-          <label for="attribute2" class="form-label">Donor Health Score</label>
-          <input type="number" class="form-control" id="attribute2" required />
-        </div>
-        <div class="mb-3">
-          <label for="attribute3" class="form-label"
-            >Donor Blood Type Compatibility</label
+          <label for="VIS" class="form-label"
+            >Vasoactive inotropic score (VIS)</label
           >
-          <input type="number" class="form-control" id="attribute3" required />
+          <input
+            type="number"
+            class="form-control"
+            id="VIS"
+            value="0"
+            min="0"
+            max="20"
+            required
+          />
         </div>
-        <button type="submit" class="btn btn-primary w-100">
-          Predict Survival
-        </button>
+        <div class="form-check form-switch mb-3">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="pupillary-reflex"
+          />
+          <label class="form-check-label" for="pupillary-reflex"
+            >Pupillary reflex</label
+          >
+        </div>
+        <div class="form-check form-switch mb-3">
+          <input class="form-check-input" type="checkbox" id="PEEP" />
+          <label class="form-check-label" for="PEEP">PEEP</label>
+        </div>
+        <div class="form-check form-switch mb-3">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="triggering-ventilator"
+          />
+          <label class="form-check-label" for="triggering-ventilator"
+            >Triggering the ventilator</label
+          >
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Submit</button>
       </form>
       <!-- Result Display -->
-      <div class="result" id="prediction-result"></div>
+      <div class="result" id="death-prediction"></div>
+      <div class="result" id="death-probability"></div>
     </div>
     <!-- JavaScript for Model Execution -->
     <script src="script.js"></script>
