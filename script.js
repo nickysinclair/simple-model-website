@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  function predict(gc, pupillaryReflex, peep, triggeringVentilator, vis) {
+  function predict(gcs, pupillaryReflex, peep, triggeringVentilator, vis) {
     if (vis > 5) {
       var visBinarized = 1;
     } else {
