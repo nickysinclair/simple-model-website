@@ -1,16 +1,16 @@
 $(document).ready(function () {
-  function predict(GCS, pupillaryReflex, PEEP, triggeringVentilator, VIS) {
-    if (VIS > 5) {
-      var VIS_binarized = 1;
+  function predict(gc, pupillaryReflex, peep, triggeringVentilator, vis) {
+    if (vis > 5) {
+      var visBinarized = 1;
     } else {
-      var VIS_binarized = 0;
+      var visBinarized = 0;
     }
 
     let deathOdds = Math.exp(
       2.12 -
-        0.323 * GCS +
-        0.181 * PEEP +
-        2.445 * VIS_binarized -
+        0.323 * gcs +
+        0.181 * peep +
+        2.445 * visBinarized -
         0.8 * pupillaryReflex -
         0.874 * triggeringVentilator
     );
@@ -36,19 +36,20 @@ $(document).ready(function () {
     event.preventDefault();
 
     // Get input values
-    let GCS = $("#GCS").val();
-    let VIS = $("#VIS").val();
+    let gcs = $("#GCS").val();
+    let vis = $("#VIS").val();
     let pupillaryReflex = $("#pupillary-reflex").is(":checked");
-    let PEEP = $("#PEEP").is(":checked");
+    console.log(pupillaryReflex * 0.8);
+    let peep = $("#PEEP").is(":checked");
     let triggeringVentilator = $("#triggering-ventilator").is(":checked");
 
     // Run the prediction model
     let prediction = predict(
-      GCS,
+      gcs,
       pupillaryReflex,
-      PEEP,
+      peep,
       triggeringVentilator,
-      VIS
+      vis
     );
 
     // Display the result
