@@ -16,19 +16,19 @@ $(document).ready(function () {
     );
 
     let deathProbability = deathOdds / (1 + deathOdds);
+    let deathProbabilityPercent = (deathProbability * 100).toFixed(1);
 
-    if (deathProbability > 0.5) {
-      var prediction = "Death";
-    } else {
-      var prediction = "Not Death";
-    }
+    // console.log(`GCS: ${gcs}`);
+    // console.log(`VIS: ${vis}`);
+    // console.log(`VIS Binarized: ${visBinarized}`);
+    // console.log(`PEEP: ${peep}`);
+    // console.log(`Pupillary Reflex Present: ${pupillaryReflex}`);
+    // console.log(`Spontaneous Respiration: ${triggeringVentilator}`);
+    // console.log(`Predicted Odds: ${deathOdds}`);
+    // console.log(`Predicted Prob: ${deathProbability}`);
+    // console.log(`Predicted Prob(%): ${deathProbabilityPercent}%`);
 
-    let predictionTexts = [
-      `Predicted Outcome: ${prediction}`,
-      `Predicted Probability of Death: ${(deathProbability * 100).toFixed(1)}%`,
-    ];
-
-    return predictionTexts;
+    return deathProbabilityPercent;
   }
 
   // Form submission handler
@@ -38,10 +38,9 @@ $(document).ready(function () {
     // Get input values
     let gcs = $("#GCS").val();
     let vis = $("#VIS").val();
-    let pupillaryReflex = $("#pupillary-reflex").is(":checked");
-    console.log(pupillaryReflex * 0.8);
-    let peep = $("#PEEP").is(":checked");
-    let triggeringVentilator = $("#triggering-ventilator").is(":checked");
+    let peep = $("#PEEP").val();
+    let pupillaryReflex = $("#pupillary-yes").prop("checked");
+    let triggeringVentilator = $("#ventilator-yes").prop("checked");
 
     // Run the prediction model
     let prediction = predict(
@@ -53,7 +52,7 @@ $(document).ready(function () {
     );
 
     // Display the result
-    $("#death-prediction").text(prediction[0]);
-    $("#death-probability").text(prediction[1]);
+    $("#death-percentage").text(`${prediction}%`);
+    $("#result-container").fadeIn();
   });
 });

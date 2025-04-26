@@ -3,109 +3,288 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Heart Transplant Survival Prediction</title>
-    <!-- Bootstrap CSS -->
+    <title>DCD Heart Donor Prediction Tool</title>
+
+    <!-- Bootstrap -->
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+    />
+
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Custom CSS for minimal styling -->
+
     <style>
       body {
         background-color: #f8f9fa;
-        font-family: Arial, sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+        font-size: 16px;
+        color: #212529;
+        padding: 2rem 1rem;
       }
-      .container {
-        max-width: 600px;
-        margin-top: 5%;
+
+      .calculator-card {
+        background-color: #fff;
+        border-radius: 0.5rem;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
         padding: 2rem;
-        background-color: #ffffff;
-        border-radius: 8px;
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        max-width: 750px;
+        margin: auto;
       }
-      h2 {
-        color: #333;
-        text-align: center;
-        margin-bottom: 1.5rem;
+
+      h1 {
+        font-size: 1.75rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
       }
-      .result {
-        margin-top: 1rem;
+
+      h5 {
+        font-size: 1.125rem;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+      }
+
+      .form-table {
+        width: 100%;
+      }
+
+      .form-table tr {
+        vertical-align: middle;
+        border-bottom: 1px solid #eee;
+      }
+
+      .form-table td:first-child {
+        width: 60%;
+        font-weight: 500;
+        padding: 0.75rem 0.5rem;
+      }
+
+      .form-table td:last-child {
+        text-align: right;
+        padding: 0.75rem 0.5rem;
+      }
+
+      .form-control {
+        display: inline-block;
+        width: 120px;
+        margin-left: 0.5rem;
+      }
+
+      .unit {
+        margin-left: 0.5rem;
+        color: #6c757d;
+        font-size: 0.9rem;
+      }
+
+      .form-check-inline {
+        margin-right: 1rem;
+      }
+
+      .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        margin-top: 1.5rem;
+        min-width: 160px;
+      }
+
+      #death-probability {
+        margin-top: 2rem;
+        font-size: 1.15rem;
+      }
+
+      #death-percentage {
         font-weight: bold;
+      }
+
+      /* Style for smaller text */
+      .small-text {
+        font-size: 0.85rem; /* Slightly smaller than the default text */
+        color: #6c757d; /* Muted gray for a less prominent look */
+        margin-top: 1rem;
+      }
+      #result-container {
+        display: none; /* Hide results initially */
+        margin-top: 2rem;
       }
     </style>
   </head>
   <body>
-    <div class="container">
-      <h2>Heart Donor Prediction Model</h2>
-      <!-- Prediction Form -->
+    <div class="calculator-card">
+      <h1>DCD Heart Donor Prediction Tool</h1>
+      <p>
+        About the tool: This multivariate logistic regression model was
+        developed to predict progression to circulatory death after withdrawal
+        of care among potential DCD heart donors. Inputs should be from the time
+        point closest to withdrawal of care.
+      </p>
       <form id="prediction-form">
-        <div class="mb-3">
-          <label for="GCS" class="form-label">Glasgow Coma Scale (GCS)</label>
-          <input
-            type="number"
-            class="form-control"
-            id="GCS"
-            value="0"
-            min="0"
-            max="15"
-            required
-          />
+        <table class="form-table">
+          <!-- GCS -->
+          <tr>
+            <td>Glasgow Coma Scale (GCS)</td>
+            <td>
+              <input
+                type="number"
+                class="form-control"
+                id="GCS"
+                value="0"
+                min="0"
+                max="15"
+                required
+              />
+            </td>
+          </tr>
+
+          <!-- VIS -->
+          <tr>
+            <td>
+              Vasoactive Inotropic Score (VIS)
+              <a
+                href="https://calculators.tools/prompt/7455/iframe/"
+                target="_blank"
+                class="ms-2 text-decoration-none"
+                >Calculate
+                <i class="bi bi-box-arrow-up-right"></i>
+              </a>
+            </td>
+            <td>
+              <input
+                type="number"
+                class="form-control"
+                id="VIS"
+                value="0"
+                min="0"
+                max="100"
+                required
+              />
+            </td>
+          </tr>
+
+          <!-- PEEP -->
+          <tr>
+            <td>Positive End-Expiratory Pressure (PEEP) [mmHg]</td>
+            <td>
+              <input
+                type="number"
+                class="form-control"
+                id="PEEP"
+                value="0"
+                min="0"
+                max="30"
+                required
+              />
+            </td>
+          </tr>
+
+          <!-- Pupillary Reflex -->
+          <tr>
+            <td>Pupillary Reflex Present</td>
+            <td>
+              <div class="form-check form-check-inline">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="pupillary-reflex"
+                  id="pupillary-yes"
+                  value="yes"
+                />
+                <label class="form-check-label" for="pupillary-yes">Yes</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="pupillary-reflex"
+                  id="pupillary-no"
+                  value="no"
+                  checked
+                />
+                <label class="form-check-label" for="pupillary-no">No</label>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Spontaneous Respiration -->
+          <tr>
+            <td>
+              Spontaneous Respiration
+              <i
+                class="bi bi-info-circle-fill text-muted ms-1"
+                data-bs-toggle="tooltip"
+                title="Including triggering or over-breathing the ventilator"
+              ></i>
+            </td>
+            <td>
+              <div class="form-check form-check-inline">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="triggering-ventilator"
+                  id="ventilator-yes"
+                  value="yes"
+                />
+                <label class="form-check-label" for="ventilator-yes">Yes</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="triggering-ventilator"
+                  id="ventilator-no"
+                  value="no"
+                  checked
+                />
+                <label class="form-check-label" for="ventilator-no">No</label>
+              </div>
+            </td>
+          </tr>
+        </table>
+
+        <div class="text-end">
+          <button type="submit" class="btn btn-primary">Calculate</button>
         </div>
-        <div class="mb-3">
-          <label for="VIS" class="form-label"
-            >Vasoactive inotropic score (VIS)</label
-          >
-          <input
-            type="number"
-            class="form-control"
-            id="VIS"
-            value="0"
-            min="0"
-            max="100"
-            required
-          />
-        </div>
-        <div class="mb-3">
-          <label for="PEEP" class="form-label">PEEP</label>
-          <input
-            type="number"
-            class="form-control"
-            id="PEEP"
-            value="0"
-            min="0"
-            max="30"
-            required
-          />
-        </div>
-        <div class="form-check form-switch mb-3">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            id="pupillary-reflex"
-          />
-          <label class="form-check-label" for="pupillary-reflex"
-            >Pupillary reflex</label
-          >
-        </div>
-        <div class="form-check form-switch mb-3">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            id="triggering-ventilator"
-          />
-          <label class="form-check-label" for="triggering-ventilator"
-            >Triggering the ventilator</label
-          >
-        </div>
-        <button type="submit" class="btn btn-primary w-100">Submit</button>
       </form>
-      <!-- Result Display -->
-      <div class="result" id="death-prediction"></div>
-      <div class="result" id="death-probability"></div>
+
+      <div id="result-container">
+        <div id="death-probability">
+          Predicted probability of progression to circulatory death:
+          <span id="death-percentage" class="bold-percentage"></span>
+        </div>
+
+        <p class="small-text">
+          In the model development cohort, probability &gt;50% demonstrated
+          sensitivity of 0.85 and specificity of 0.52 with respect to the
+          outcome of circulatory death. Assuming the outcome prevalence observed
+          in the development cohort, this yielded positive predictive value of
+          76% and negative predictive value of 66%. Probability &lt;20% yielded
+          a negative predictive value of 100%, meaning a donor exceedingly
+          unlikely to progress to circulatory death.
+        </p>
+
+        <p class="small-text">
+          This tool is experimental and should not be used alone to guide
+          patient care. Physicians and other healthcare professionals who use
+          this tool should exercise their own clinical judgment before making
+          any medical decisions.
+        </p>
+      </div>
     </div>
-    <!-- JavaScript for Model Execution -->
+
+    <!-- Bootstrap Tooltips -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="script.js"></script>
+    <script>
+      const tooltipTriggerList = document.querySelectorAll(
+        '[data-bs-toggle="tooltip"]'
+      );
+      tooltipTriggerList.forEach((el) => {
+        new bootstrap.Tooltip(el);
+      });
+    </script>
   </body>
 </html>
